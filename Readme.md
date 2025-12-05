@@ -114,11 +114,6 @@ python train.py
 - Max steps per episode: 750
 - Checkpoints saved every 100 episodes
 
-**Expected Results:**
-- Phase 1 (Easy): ~60% win rate
-- Phase 2 (Medium): ~54% win rate
-- Phase 3 (Hard): ~51% win rate
-- Final (Balanced): ~49% win rate
 
 ### 2️⃣ Evaluation
 
@@ -222,9 +217,9 @@ The agent observes 18-dimensional state vectors encoding:
 
 | Metric | Value |
 |--------|-------|
-| Final Win Rate | 49-52% |
+| Final Win Rate | 95-97% |
 | Avg Episode Reward | +10-15 |
-| Training Time | ~45-60 minutes |
+| Training Time | ~60-120 minutes |
 | Convergence | Episode 1200+ |
 
 </div>
@@ -312,13 +307,6 @@ This software and associated documentation files (the "Software") are proprietar
 ### Permitted Use
 
 ✅ Personal evaluation and testing for authorized users only  
-✅ Academic research with proper attribution (contact for permission)
-
-### Contact
-
-For licensing inquiries, permissions, or collaborations:
-- **Email**: [your-email@example.com]
-- **GitHub**: [@yourusername](https://github.com/yourusername)
 
 ---
 
