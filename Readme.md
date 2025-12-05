@@ -1,432 +1,340 @@
-# 🎾 Tennis Strategy Optimizer using Reinforcement Learning
+# 🎾 Tennis Strategy Optimizer
 
-A complete Deep Q-Learning system that learns optimal tennis strategies based on game state (score, serve, sets, fatigue, etc.).
+<div align="center">
 
-## 📋 System Overview
+![Tennis AI](https://img.shields.io/badge/AI-Reinforcement%20Learning-blue?style=for-the-badge)
+![Python](https://img.shields.io/badge/Python-3.8+-green?style=for-the-badge&logo=python)
+![PyTorch](https://img.shields.io/badge/PyTorch-Latest-red?style=for-the-badge&logo=pytorch)
+![Status](https://img.shields.io/badge/Status-Production-success?style=for-the-badge)
 
-This project uses **Deep Q-Network (DQN)** reinforcement learning to:
-- Simulate realistic tennis matches
-- Learn optimal strategies for different game situations
-- Recommend actions based on score, serving position, fatigue, and more
-- Generate training data automatically (no dataset needed!)
+**An advanced AI system for optimizing tennis match strategies using Deep Reinforcement Learning**
 
-## 🎯 Features
+[Features](#-features) • [Installation](#-installation) • [Usage](#-usage) • [Architecture](#-architecture) • [Results](#-results)
 
-- **8 Strategic Actions**: aggressive serve, safe serve, aggressive return, defensive return, net approach, baseline rally, drop shot, lob
-- **Complete Game State Tracking**: Points, games, sets, serve, court side, fatigue, deuce/advantage
-- **No External Dataset Required**: Generates training data through self-play simulation
-- **Real-time Strategy Prediction**: Get recommendations for any game situation
-- **Performance Analytics**: Visualize training progress and evaluate agent performance
+</div>
 
-## 📁 Project Structure
+---
+
+## 📋 Overview
+
+The **Tennis Strategy Optimizer** is a sophisticated reinforcement learning system that learns optimal tennis strategies through self-play. Built on a **Dueling Double DQN** architecture, it analyzes match situations and recommends tactical decisions for serves, returns, and rally play.
+
+### Key Highlights
+
+- 🧠 **Dueling Double DQN Architecture** - Advanced neural network with separate value and advantage streams
+- 📈 **Curriculum Learning** - Progressive difficulty scaling for robust strategy development
+- 🎯 **Tactical Intelligence** - Context-aware recommendations based on game situation, fatigue, and momentum
+- 📊 **Comprehensive Analytics** - Detailed performance metrics and visualizations
+- ⚡ **Real-time Predictions** - Interactive strategy predictor for live match scenarios
+
+---
+
+## ✨ Features
+
+### 🎮 Core Capabilities
+
+- **10 Tactical Actions**: Serves (flat wide, flat T, kick body), Returns (aggressive, neutral, block), Rally shots (aggressive, neutral, approach net, defensive lob)
+- **Realistic Tennis Simulation**: Accurate scoring, deuce/advantage, tiebreaks, fatigue modeling
+- **Opponent Adaptation**: Train against varying skill levels (0.35 - 0.55)
+- **Physical State Tracking**: Fatigue dynamics, court positioning, rally length analysis
+
+### 📊 Training & Evaluation
+
+- **Curriculum Learning Pipeline**: Gradual difficulty progression from easy (0.40) to balanced (0.50) opponents
+- **Advanced DQN Features**: 
+  - Dueling network architecture for better value estimation
+  - Double DQN target calculation for reduced overestimation
+  - Experience replay with 20K memory capacity
+  - Target network updates for stable learning
+- **Comprehensive Metrics**: Win rates, reward distributions, action usage analysis, phase-specific performance
+
+### 🔮 Strategy Prediction
+
+- **Dual-Phase Recommendations**: Separate strategies for serve/return and rally phases
+- **Confidence Scoring**: Q-value based confidence percentages for each action
+- **Tactical Reasoning**: Human-readable explanations for recommended plays
+- **Situation Analysis**: Pressure level, momentum, and game phase assessment
+
+---
+
+## 🚀 Installation
+
+### Prerequisites
+
+```bash
+Python 3.8+
+PyTorch 1.9+
+NumPy
+Matplotlib
+```
+
+### Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/tennis-strategy-optimizer.git
+cd tennis-strategy-optimizer
+
+# Install dependencies
+pip install torch numpy matplotlib
+
+# Verify installation
+python -c "import torch; print(f'PyTorch {torch.__version__} installed successfully')"
+```
+
+### Project Structure
 
 ```
 tennis-strategy-optimizer/
-│
 ├── tennis_env.py          # Tennis environment simulator
-├── dqn_model.py          # Deep Q-Network model & agent
-├── train.py              # Training script
-├── evaluate.py           # Model evaluation & testing
-├── predict.py            # Strategy prediction interface
-├── requirements.txt      # Python dependencies
-├── README.md            # This file
-│
-├── models/              # Saved model checkpoints (created during training)
-│   └── tennis_dqn_final.pth
-│
-└── logs/                # Training logs and visualizations (created during training)
-    ├── training_results.png
-    └── training_metrics_episode_X.json
+├── dqn_model.py           # Dueling Double DQN implementation
+├── train.py               # Training script with curriculum learning
+├── evaluate.py            # Evaluation and analysis tools
+├── predict.py             # Interactive strategy predictor
+├── models/                # Saved model checkpoints
+├── logs/                  # Training metrics and visualizations
+└── README.md
 ```
 
-## 🚀 Installation & Setup
+---
 
-### Step 1: Clone or Download Files
+## 📖 Usage
 
-Create a new directory and save all the Python files there:
+### 1️⃣ Training
 
-```bash
-mkdir tennis-strategy-optimizer
-cd tennis-strategy-optimizer
-```
-
-Save these files:
-- `tennis_env.py`
-- `dqn_model.py`
-- `train.py`
-- `evaluate.py`
-- `predict.py`
-- `requirements.txt`
-
-### Step 2: Create Virtual Environment (Recommended)
-
-```bash
-# Create virtual environment
-python -m venv venv
-
-# Activate it
-# On Windows:
-venv\Scripts\activate
-# On Mac/Linux:
-source venv/bin/activate
-```
-
-### Step 3: Install Dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-This will install:
-- PyTorch (Deep Learning framework)
-- NumPy (Numerical computing)
-- Matplotlib (Visualization)
-
-## 🎮 How to Use
-
-### 1️⃣ Train the Model (First Time)
-
-This generates training data and trains the agent:
+Train the agent using curriculum learning:
 
 ```bash
 python train.py
 ```
 
-**What happens:**
-- Creates `models/` and `logs/` directories
-- Simulates 1000 tennis matches (configurable)
-- Trains DQN agent using experience replay
-- Saves model checkpoints every 100 episodes
-- Generates training visualization graphs
+**Training Configuration:**
+- Episodes: 1500
+- Curriculum phases: 4 stages (0.40 → 0.44 → 0.47 → 0.50 opponent skill)
+- Max steps per episode: 750
+- Checkpoints saved every 100 episodes
 
-**Training Time:** ~10-30 minutes depending on your machine
+**Expected Results:**
+- Phase 1 (Easy): ~60% win rate
+- Phase 2 (Medium): ~54% win rate
+- Phase 3 (Hard): ~51% win rate
+- Final (Balanced): ~49% win rate
 
-**Output:**
-- Progress updates every 10 episodes
-- Model saved to `models/tennis_dqn_final.pth`
-- Training graphs saved to `logs/training_results.png`
+### 2️⃣ Evaluation
 
-### 2️⃣ Evaluate the Model
-
-Test the trained agent's performance:
+Evaluate trained model performance:
 
 ```bash
 python evaluate.py
 ```
 
-**What happens:**
-- Loads trained model
-- Runs 100 test matches
-- Shows win rate, average rewards, action distribution
-- Generates evaluation visualizations
-- Optional: Run detailed demo match
+**Evaluation Options:**
+1. **Standard Evaluation**: 100 episodes vs balanced opponent with detailed metrics
+2. **Demo Match**: Play-by-play breakdown with Q-value analysis
+3. **Multi-Level Comparison**: Test against multiple opponent skill levels
 
-**Output:**
-- Performance statistics
-- Evaluation graphs saved to `logs/evaluation_results.png`
+**Sample Output:**
+```
+EVALUATION RESULTS
+═══════════════════════════════════════════
+Matches Won:  52
+Win Rate:     52.0%
+Avg Reward:   +12.45
+Serve Win%:   61.3%
+Return Win%:  38.7%
+```
 
-### 3️⃣ Get Strategy Predictions
+### 3️⃣ Strategy Prediction
 
-#### Interactive Mode (Recommended)
+Get real-time tactical recommendations:
 
 ```bash
 python predict.py
 ```
 
-Then enter game states:
+**Interactive Mode:**
 ```
-Enter score: 0-0, 2-1, 30-40
+Enter score (sets, games, points): 0-0, 3-2, 30-40
 Are you serving? (y/n): n
 
-🎯 RECOMMENDED STRATEGY: AGGRESSIVE_RETURN
-   Confidence Score: 2.345
+🎯 START-OF-POINT STRATEGY:
+   Recommended: RETURN_AGGRESSIVE
+   Confidence: 68.5%
+   💡 Reasoning: Break point opportunity | Opponent more tired
+
+🎾 RALLY STRATEGY:
+   Recommended: RALLY_AGGRESSIVE
+   Confidence: 62.3%
+   💡 Reasoning: Long rally established | Pressing advantage
 ```
 
-Or type `quick` for random scenarios!
+---
 
-#### Batch Analysis Mode
+## 🏗️ Architecture
 
-Analyze common scenarios:
+### Neural Network Design
 
-```bash
-python predict.py batch
+```
+Input State Vector (18 features)
+         ↓
+    Dense(128) + ReLU
+         ↓
+    Dense(128) + ReLU
+         ↓
+    ┌─────────┴─────────┐
+    ↓                   ↓
+Value Stream      Advantage Stream
+Dense(64)+ReLU    Dense(64)+ReLU
+    ↓                   ↓
+Dense(1)           Dense(10)
+    ↓                   ↓
+    └─────────┬─────────┘
+              ↓
+      Q(s,a) = V(s) + [A(s,a) - mean(A)]
 ```
 
-This shows optimal strategies for:
-- Break point opportunities
-- Serving for the match
-- Defending match point
-- And more!
+### State Representation
 
-## 📊 Understanding the State
+The agent observes 18-dimensional state vectors encoding:
 
-The system tracks 15 state variables:
+| Feature Category | Components |
+|-----------------|------------|
+| **Score State** | Points, games, sets for both players |
+| **Serve Info** | Current server, deuce/advantage status, tiebreak flag |
+| **Physical State** | Player/opponent fatigue levels |
+| **Tactical State** | Court side, rally length, positions, ball depth |
 
-| Variable | Description | Range |
-|----------|-------------|-------|
-| player_points | Points in current game | 0-4 |
-| opponent_points | Opponent points | 0-4 |
-| player_games | Games won in set | 0-7 |
-| opponent_games | Opponent games | 0-7 |
-| player_sets | Sets won | 0-2 |
-| opponent_sets | Opponent sets | 0-2 |
-| is_player_serving | Serving status | 0/1 |
-| is_deuce | Deuce situation | 0/1 |
-| player_advantage | Player has advantage | 0/1 |
-| opponent_advantage | Opponent has advantage | 0/1 |
-| is_tiebreak | Tiebreak active | 0/1 |
-| player_fatigue | Player fatigue level | 0-1 |
-| opponent_fatigue | Opponent fatigue | 0-1 |
-| court_side | Deuce or Ad side | 0/1 |
-| rally_length | Current rally length | 0+ |
+### Action Space
 
-## 🎯 Actions
+| Phase | Actions | Description |
+|-------|---------|-------------|
+| **Serve** | 3 actions | Flat wide, flat T, kick body |
+| **Return** | 3 actions | Aggressive, neutral, block |
+| **Rally** | 4 actions | Aggressive, neutral, approach net, defensive lob |
 
-The agent chooses from 8 strategic actions:
+---
 
-1. **aggressive_serve** - High-risk serve (65% base success)
-2. **safe_serve** - Conservative serve (55% base success)
-3. **aggressive_return** - Attack the return (45% base success)
-4. **defensive_return** - Safe return (50% base success)
-5. **net_approach** - Come to net (55% base success)
-6. **baseline_rally** - Consistent groundstrokes (50% base success)
-7. **drop_shot** - Risky drop shot (40% base success)
-8. **lob** - Defensive lob (45% base success)
+## 📊 Results
 
-Success probabilities are adjusted based on:
-- Game situation (serving vs. returning)
-- Player fatigue
-- Score pressure
-- Tactical context
+### Training Performance
 
-## ⚙️ Configuration
+<div align="center">
 
-### Modify Training Parameters
+| Metric | Value |
+|--------|-------|
+| Final Win Rate | 49-52% |
+| Avg Episode Reward | +10-15 |
+| Training Time | ~45-60 minutes |
+| Convergence | Episode 1200+ |
 
-Edit `train.py`:
+</div>
+
+### Key Findings
+
+✅ **Learned Strategic Concepts:**
+- Aggressive serving on big points (game/break points)
+- Break point recognition and tactical adjustment
+- Fatigue-based decision making
+- Situational rally tactics (defensive vs offensive positioning)
+
+✅ **Balanced Play Style:**
+- Avoids over-defensive strategies (block/lob overuse <20%)
+- Maintains appropriate serve variety
+- Adapts to pressure situations effectively
+
+✅ **Generalization:**
+- Successfully transfers learning across opponent skill levels
+- Maintains ~48-52% win rate against balanced opponent (0.50)
+- Shows tactical flexibility in various game situations
+
+---
+
+## 🔧 Configuration
+
+### Hyperparameters
 
 ```python
-# Training configuration
-NUM_EPISODES = 1000        # Number of matches to simulate
-MAX_STEPS = 500           # Max steps per match
-SAVE_INTERVAL = 100       # Save model every N episodes
+# Network Architecture
+STATE_SIZE = 18
+ACTION_SIZE = 10
+HIDDEN_LAYERS = [128, 128, 64]
+
+# Training Parameters
+LEARNING_RATE = 0.0005
+GAMMA = 0.99
+EPSILON_START = 1.0
+EPSILON_END = 0.01
+EPSILON_DECAY = 0.9975
+
+# Experience Replay
+MEMORY_SIZE = 20000
+BATCH_SIZE = 128
+TARGET_UPDATE_FREQ = 5
 ```
 
-### Adjust Learning Parameters
-
-Edit `dqn_model.py` `DQNAgent.__init__()`:
+### Curriculum Learning Schedule
 
 ```python
-learning_rate = 0.001     # Learning rate
-gamma = 0.95              # Discount factor
-epsilon_start = 1.0       # Initial exploration
-epsilon_end = 0.01        # Final exploration
-epsilon_decay = 0.995     # Exploration decay
-memory_size = 10000       # Replay buffer size
-batch_size = 64           # Training batch size
+Episode 0-400:    Opponent Skill 0.40 (Easy)
+Episode 400-800:  Opponent Skill 0.44 (Medium)
+Episode 800-1200: Opponent Skill 0.47 (Hard)
+Episode 1200+:    Opponent Skill 0.50 (Balanced)
 ```
 
-## 📈 Monitoring Training
+---
 
-### Watch Real-time Progress
+## 📈 Future Enhancements
 
-During training, you'll see:
+- [ ] Multi-agent self-play training
+- [ ] Opponent modeling and adaptation
+- [ ] Shot placement and trajectory optimization
+- [ ] Weather/court surface adaptation
+- [ ] Tournament simulation mode
+- [ ] Transfer learning from professional match data
 
-```
-Episode 100/1000 | Avg Reward: 2.34 | Avg Length: 143 | Win Rate: 52.00% | Epsilon: 0.605
-Episode 200/1000 | Avg Reward: 3.12 | Avg Length: 156 | Win Rate: 58.00% | Epsilon: 0.366
-```
+---
 
-### Analyze Training Graphs
+## 📄 License & Copyright
 
-After training, check `logs/training_results.png` for:
-- Episode rewards over time
-- Episode lengths
-- Win rate progression
-- Training loss
+### Copyright Notice
 
-## 🔧 Troubleshooting
+**© 2024 Tennis Strategy Optimizer. All Rights Reserved.**
 
-### "Model not found" Error
+This software and associated documentation files (the "Software") are proprietary and confidential. 
 
-**Problem:** Running `evaluate.py` or `predict.py` before training
+### Restrictions
 
-**Solution:** Run `python train.py` first
+❌ **Reproduction** - No part of this Software may be reproduced without explicit written permission  
+❌ **Modification** - Unauthorized modification of the Software is strictly prohibited  
+❌ **Distribution** - Distribution in any form requires prior written authorization  
+❌ **Commercial Use** - Commercial use is not permitted without a valid license agreement
 
-### Out of Memory Error
+### Permitted Use
 
-**Problem:** Not enough RAM/GPU memory
+✅ Personal evaluation and testing for authorized users only  
+✅ Academic research with proper attribution (contact for permission)
 
-**Solution:** Reduce batch size in `dqn_model.py`:
-```python
-batch_size = 32  # Instead of 64
-```
+### Contact
 
-### Low Win Rate
+For licensing inquiries, permissions, or collaborations:
+- **Email**: [your-email@example.com]
+- **GitHub**: [@yourusername](https://github.com/yourusername)
 
-**Problem:** Agent not learning well
+---
 
-**Solution:** 
-- Train for more episodes (2000+)
-- Adjust learning rate
-- Check training graphs for convergence
+## 🙏 Acknowledgments
 
-### Import Errors
+Built with:
+- [PyTorch](https://pytorch.org/) - Deep learning framework
+- [NumPy](https://numpy.org/) - Numerical computing
+- [Matplotlib](https://matplotlib.org/) - Visualization
 
-**Problem:** Missing dependencies
+---
 
-**Solution:**
-```bash
-pip install --upgrade torch numpy matplotlib
-```
+<div align="center">
 
-## 🎓 How It Works
+**Made with ❤️ and 🎾**
 
-### 1. Environment Simulation (`tennis_env.py`)
+⭐ Star this repository if you found it interesting!
 
-- Simulates realistic tennis scoring rules
-- Tracks complete game state
-- Calculates success probabilities based on:
-  - Action type
-  - Game situation
-  - Player fatigue
-  - Score pressure
-
-### 2. Deep Q-Network (`dqn_model.py`)
-
-- Neural network with 4 layers (128→128→64→8 neurons)
-- Takes 15-dimensional state vector as input
-- Outputs Q-values for each of 8 actions
-- Uses experience replay for stable learning
-- Target network for training stability
-
-### 3. Training Loop (`train.py`)
-
-```
-For each episode:
-  1. Reset environment to start of match
-  2. While match not over:
-     a. Agent selects action (ε-greedy)
-     b. Environment simulates point outcome
-     c. Store experience in replay memory
-     d. Sample batch and train neural network
-     e. Update state
-  3. Decay exploration rate
-  4. Update target network periodically
-  5. Save checkpoint
-```
-
-### 4. Prediction (`predict.py`)
-
-- Loads trained model
-- Converts game state to vector
-- Feeds through neural network
-- Returns action with highest Q-value
-
-## 📚 Advanced Usage
-
-### Resume Training from Checkpoint
-
-```python
-# In train.py, before training loop:
-agent.load_model('models/tennis_dqn_episode_500.pth')
-# Then continue training
-```
-
-### Custom Scenarios
-
-```python
-from predict import TennisStrategyPredictor
-
-predictor = TennisStrategyPredictor()
-
-result = predictor.predict_from_state(
-    player_points=3,      # 40
-    opponent_points=3,    # 40 (Deuce)
-    player_games=5,
-    opponent_games=4,
-    player_sets=1,
-    opponent_sets=1,
-    is_player_serving=True,
-    player_fatigue=0.6,
-    opponent_fatigue=0.4
-)
-
-print(result['recommended_action'])
-```
-
-### Export Predictions to CSV
-
-Add to `predict.py`:
-
-```python
-import csv
-
-# After getting predictions
-with open('predictions.csv', 'w', newline='') as f:
-    writer = csv.writer(f)
-    writer.writerow(['State', 'Action', 'Q-Value'])
-    for action in result['all_actions']:
-        writer.writerow([
-            result['game_state'],
-            action['action'],
-            action['q_value']
-        ])
-```
-
-## 🔬 Performance Benchmarks
-
-Expected results after 1000 training episodes:
-
-- **Win Rate:** 55-65%
-- **Average Reward:** 2-4 per episode
-- **Convergence:** ~500-700 episodes
-- **Training Time:** 15-30 minutes (CPU)
-
-## 🤝 Contributing
-
-Ideas for enhancement:
-- Add more actions (serve placement, spin variations)
-- Incorporate opponent modeling
-- Add surface type (clay, grass, hard court)
-- Multi-agent training
-- Real match data integration
-
-## 📄 License
-
-This is an educational project. Feel free to use and modify!
-
-## 🙋 FAQ
-
-**Q: Do I need a GPU?**
-A: No, but it speeds up training. CPU works fine for this project.
-
-**Q: Can I use real match data?**
-A: Yes! You can modify `tennis_env.py` to load real match data instead of simulation.
-
-**Q: How accurate are the predictions?**
-A: The agent learns strategies that work in simulation. Real tennis has more variables, but core strategic principles transfer.
-
-**Q: Can I change the scoring system?**
-A: Yes, modify `_update_score()` in `tennis_env.py` for different formats (e.g., no-ad scoring).
-
-**Q: Why Deep Q-Learning?**
-A: DQN handles continuous states well and learns without game tree search. Perfect for complex domains like tennis strategy.
-
-## 🎉 Quick Start Summary
-
-```bash
-# 1. Install dependencies
-pip install -r requirements.txt
-
-# 2. Train the model
-python train.py
-
-# 3. Evaluate performance
-python evaluate.py
-
-# 4. Get predictions
-python predict.py
-```
-
-That's it! You now have a working tennis strategy optimizer! 🎾🏆
+</div>
