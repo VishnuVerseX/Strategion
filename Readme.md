@@ -1,6 +1,5 @@
 # 🎾 Tennis Strategy Optimizer
-<div align="center">
-⚖️ © 2025 - ALL RIGHTS RESERVED ⚖️
+
 
 <div align="center">
 
@@ -14,6 +13,9 @@
 [Features](#-features) • [Installation](#-installation) • [Usage](#-usage) • [Architecture](#-architecture) • [Results](#-results)
 
 </div>
+
+<div align="center">
+⚖️ © 2025 - ALL RIGHTS RESERVED ⚖️
 
 ---
 
