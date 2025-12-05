@@ -1,4 +1,6 @@
 # 🎾 Tennis Strategy Optimizer
+<div align="center">
+⚖️ © 2025 - ALL RIGHTS RESERVED ⚖️
 
 <div align="center">
 
@@ -293,7 +295,7 @@ Episode 1200+:    Opponent Skill 0.50 (Balanced)
 
 ### Copyright Notice
 
-**© 2024 Tennis Strategy Optimizer. All Rights Reserved.**
+**© 2025 Tennis Strategy Optimizer. All Rights Reserved.**
 
 This software and associated documentation files (the "Software") are proprietary and confidential. 
 
