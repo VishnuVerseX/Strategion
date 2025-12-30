@@ -1,3 +1,9 @@
 __pycache__/
 backupfiles/
 copyfiles/
+figs/
+eval_baselines.py
+createpngs.py
+data.txt
+logs/evaluation_results.png
+logs/opponent_comparison.png

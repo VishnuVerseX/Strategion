@@ -13,7 +13,7 @@ import json
 
 def evaluate_agent(
     model_path: str,
-    num_episodes: int = 100,
+    num_episodes: int = 500,
     opponent_skill: float = 0.5,
     visualize: bool = True,
     verbose: bool = True
@@ -610,7 +610,7 @@ if __name__ == "__main__":
         compare_opponent_skills(model_path, num_episodes=episodes)
     else:
         skill = float(input("Opponent skill (0.35-0.55, default 0.5): ") or "0.5")
-        results = evaluate_agent(model_path, num_episodes=100, 
+        results = evaluate_agent(model_path, num_episodes=500, 
                                opponent_skill=skill, visualize=True)
         
         if results:

@@ -533,13 +533,15 @@ class TennisEnvironment:
         }
 
         # Player tires based on their action
-        player_fatigue_inc = intensity_map.get(action, 0.020)
+        player_intensity = intensity_map.get(action, 0.020)
+        player_fatigue_inc = player_intensity + 0.002 * self.state["rally_length"]
         self.state["player_fatigue"] = min(1.0, self.state["player_fatigue"] + player_fatigue_inc)
 
         # Opponent tires based on rally length (they're hitting shots too!)
         # Assume opponent actions have similar intensity distribution
-        rally_factor = 1.0 + (self.state["rally_length"] * 0.002)  # longer rallies = more tired
-        opp_fatigue_inc = 0.020 * rally_factor
+        opp_action = self.state.get("opponent_last_action", action)
+        opp_intensity = intensity_map.get(opp_action, 0.020)
+        opp_fatigue_inc = opp_intensity + 0.002 * self.state["rally_length"]
         self.state["opponent_fatigue"] = min(1.0, self.state["opponent_fatigue"] + opp_fatigue_inc)
 
         # Position updates (tactical state tracking)
